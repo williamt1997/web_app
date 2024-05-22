@@ -1,0 +1,166 @@
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>My Website</title>
+        <link rel="stylesheet" href="./styles/style.css">
+    </head>
+    <body>
+        <header>
+            <div class="container">
+                <img src="./styles/images/MREAS.jpg" alt="Enterprise Automation Movie Reviews Site Logo">
+                <div class="header-right">
+                    <div id="username-container" class="user_header_name"></div>
+                    <form action="/logout" method="post" class="formuser">
+                        <button type="submit" class="logout">Logout</button>
+                    </form>
+                </div>
+            </div>
+        </header>
+        <div class="filter">
+            <div class="filter_form_container">
+                <form action="/backtomedia" method="post">
+                    <button  type="submit" style="width: 180px; height: 30px; margin-left: 10px; background-color: #009cc4; border: none; color: white;">Back to Media</button>
+                </form>
+            </div>
+        </div>
+        <main id="media-container">
+        </main>
+        <main id="review-container">
+        </main>
+        <main>
+            <div class="auth-container" style="background-color: #009cc4;">
+                <div class="reviewadd">
+                    <hr1 style="font-family: Arial, Helvetica, sans-serif; font-size: 25px;"id="errorLabel">Add Review: </hr1>
+                    <form id="createReview" action="/createreview" method="post" style="margin-top: 20px;" class="authform">
+                        <input type="text" id="review_title" name="review_title" class="reg_input" placeholder="Please Enter Your Review Title" required>
+                        <br>
+                        <textarea rows="5" cols="80" id="review_body" name="review_body" class="reg_input" placeholder="Please Enter Your Review Body Here"></textarea>
+                        <br>
+                        <select id="review_rating" name="review_rating" class="reg_input">
+                            <option value=1>1/5</option>
+                            <option value=2>2/5</option>
+                            <option value=3>3/5</option>
+                            <option value=4>4/5</option>
+                            <option value=5>5/5</option>
+                          </select>
+                        <br>
+                        <input type="submit" value="createreview">
+                    </form>
+                </div>
+            </div>
+    
+        </main>
+
+        <script src="./server.js"></script>
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
+                const fetchAndRenderMedia = () => {
+                    fetch('/api/review')
+                        .then(response => response.json())
+                        .then(data => renderMedia(data))
+                        .catch(error => console.error('Error fetching media data:', error));
+                };
+
+                fetchAndRenderMedia();
+
+                const renderMedia = (data) => {
+                    const container = document.getElementById('media-container');
+                    container.innerHTML = '';
+
+                    data.forEach(media => {
+                        const mediaDiv = document.createElement('div');
+                        mediaDiv.classList.add('media');
+
+                        mediaDiv.innerHTML = `
+                            <div class="movies" style="background-color: #004aad;">
+                                <div class="movie_container" style="background-color: #0058cb; margin: 30px; color: white; font-size: 20px;">
+                                    <div style="width:70%">
+                                        <div class="movie_title" style="font-size: 50px;">Movie Title: ${media.media_name}</div>
+                                        <div class="movie_body">Movie Description: ${media.media_description}</div>
+                                        <br>
+                                        <div class="movie_genre">Movie Genre: ${media.media_genre}</div>
+                                        <div class="movie_duration">Movie Duration: ${media.media_duration} minutes</div>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+
+                        container.appendChild(mediaDiv);
+                    });
+                };
+            });
+            const usernameContainer = document.getElementById('username-container');
+            fetch('/user')
+                .then(response => response.json())
+                .then(data => {
+                if (data.username) {
+                    usernameContainer.textContent = `Hi ${data.username}`;
+                }
+            })
+            .catch(error => console.error('Error fetching user data:', error));
+
+            const urlParams = new URLSearchParams(window.location.search);
+            const message = urlParams.get('message');
+
+            if (message === 'ReviewExists') {
+                const labelElement = document.getElementById('errorLabel');
+                labelElement.innerText = 'Review: You already created a review for this movie';
+            }
+            if (message === 'ReviewServerError') {
+                const labelElement = document.getElementById('errorLabel');
+                labelElement.innerText = 'Review: Server Error';
+            }
+            if (message === 'ReviewSuccessfullyAdded') {
+                const labelElement = document.getElementById('errorLabel');
+                labelElement.innerText = 'Review: Review Sucessfully Added';
+            }
+            
+            document.addEventListener('DOMContentLoaded', () => {
+                const fetchAndRenderMedia = () => {
+                    fetch('/api/reviewcontent')
+                        .then(response => response.json())
+                        .then(data => renderMedia(data))
+                        .catch(error => console.error('Error fetching media data:', error));
+                };
+
+                fetchAndRenderMedia();
+
+                const renderMedia = (data) => {
+                    const container = document.getElementById('review-container');
+                    container.innerHTML = '';
+
+                    data.forEach(review => {
+                        const mediaDiv = document.createElement('div');
+                        mediaDiv.classList.add('review');
+
+                        mediaDiv.innerHTML = `
+                            <div class="movies" style="background-color: #007d9d;">
+                                <div class="movie_container" style="background-color: #009cc4; margin: 30px; color: white; font-size: 20px;">
+                                    <div style="width:70%">
+                                        <div class="review_title" style="font-size: 50px;">Review Title: ${review.review_title}</div>
+                                        <div class="review_body">Review body: ${review.review_body}</div>
+                                        <br>
+                                        <div class="review_rating">Review Rating: ${review.review_rating}/5</div>
+                                        <br>
+                                        <div class="review_author">Author: <span id="review-${review.user_id}">Loading...</span></div>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                        fetch(`/api/review_author?user_id=${review.user_id}`)
+                            .then(response => response.json())
+                            .then(users => {
+                                let user = users[0];
+                                document.getElementById(`review-${review.user_id}`).innerText = user.user_username;
+                            })
+
+                        container.appendChild(mediaDiv);
+                    });
+                };
+            });
+        </script>
+
+    </body>
+</html>

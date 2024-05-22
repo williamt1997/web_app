@@ -1,0 +1,106 @@
+header {
+    background-color: #009cc4;
+    height: 100px;
+}
+.filter {
+    background-color: #1a5bb0;
+    height: 50px;
+}
+.filter_form_container {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 25px;
+    color: rgb(255, 255, 255);
+    padding-top: 10px;
+}
+body {
+    background-color: #050036;
+}
+.container img {
+    width: 200px;
+    height: 100%;
+}
+
+.carousel {
+    width: 100%;
+    overflow: hidden;
+    position: relative;
+    
+}
+.carousel_images {
+    display: flex;
+    transition: transform 1.5s ease-in-out;
+    height: 50%;
+}
+.car_img {
+    width: 100%;
+    min-width: 100%;
+    height: auto;
+}
+.overlay_text {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: rgba(0,0,0,0.5);
+    color: white;
+    padding: 10px;
+    box-sizing: border-box;
+    text-align: center;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 50px;
+}
+.auth-container {
+    display: flex;
+    background-color: #009cc4;
+    width: 100%;
+}
+
+.register, .login {
+    background-color: #009cc4;
+    color: white;
+    padding: 20px;
+    width: calc(50% - 5px);
+    float: left;
+}
+.reviewadd {
+    background-color: #009cc4;
+    color: white;
+    padding: 20px;
+    float: left;
+    width: 100%;
+}
+.login{
+    float: right;
+}
+.reg_input{
+    height: 40px;
+}
+.authform {
+    display: flex;
+    flex-direction: column;
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+    float: right;
+}
+
+.user_header_name {
+    color: white;
+    font-size: 30px;
+    margin-right: 10px;
+}
+
+.formuser {
+    height: 100%;
+    padding-right: 10px;
+}
+
+.logout {
+    height: 70px;
+    background-color: #0058cb;
+    font-size: 20px;
+    color: white;
+    margin-top: 15px;
+}
