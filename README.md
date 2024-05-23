@@ -44,3 +44,5 @@
 
 >---------wp3614448.webp
 
+# Database Schema
+![database schema](/readme_imgs/db.png?raw=true "database schema")
